@@ -39,7 +39,7 @@ public class QueryRequest {
   @JsonProperty("filter")
   private List<FilterDef> filters = null;
 
-  @JsonProperty("maxRows")
+  @JsonProperty("maxrows")
   private Integer maxRows = null;
 
   public QueryRequest start(Long start) {
