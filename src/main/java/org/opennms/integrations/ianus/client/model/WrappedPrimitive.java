@@ -10,7 +10,7 @@ import java.util.Objects;
  * WrappedPrimitive
  */
 public class WrappedPrimitive {
-  @JsonProperty("list")
+  @JsonProperty("values")
   private List<Double> list = null;
 
   public WrappedPrimitive list(List<Double> list) {

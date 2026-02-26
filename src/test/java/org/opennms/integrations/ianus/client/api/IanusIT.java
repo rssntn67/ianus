@@ -58,13 +58,12 @@ class IanusIT {
 
     @Test
     void getMeasurement() {
-        String resourceId = "node[Home:55].responseTime[10.99.77.42]";
+        String resourceId = "node[14].responseTime[10.99.88.96]";
         var end= Instant.now().toEpochMilli();
-        var start= end-600000;
+        var start= end-3600000;
         System.out.println(start);
         System.out.println(end);
         System.out.println(-start+end);
-        /*
         QueryRequest queryRequest = new QueryRequest();
 
             queryRequest.setStart(start);
@@ -73,20 +72,14 @@ class IanusIT {
             queryRequest.setMaxRows(100);
             Source source = new Source();
             source.setResourceId(resourceId);
-            source.setAggregation("AVERAGE");
             source.setAttribute("icmp");
             source.setLabel("icmp");
-            source.setTransient(true);
+            source.setTransient(false);
 
             queryRequest.addSourcesItem(source);
             QueryResponse queryResponse =mApi.query(queryRequest);
             System.out.println("-----QueryResponse------");
             System.out.println(queryResponse);
-*/
-        QueryResponse    queryResponse = mApi.simpleQuery(resourceId, "icmp", null, null, null, null,null, null, null);
-        System.out.println("-----QueryResponse------");
-        System.out.println(queryResponse);
-
     }
 
 
