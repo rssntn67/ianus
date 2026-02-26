@@ -15,11 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration tests for ResourcesApi against a live OpenNMS instance.
- *
  * Run with:
  *   ./mvnw verify \
  *     -Dopennms.it.enabled=true \
- *     -Dopennms.base-url=http://localhost:8980/opennms/rest \
+ *     -Dopennms.base-url=<a href="http://localhost:8980/opennms/rest">...</a> \
  *     -Dopennms.username=admin \
  *     -Dopennms.password=admin \
  *     -Dopennms.it.resource.id=node[1].nodeSnmp[] \
@@ -43,10 +42,6 @@ class ResourcesApiIT {
     void getResources_returnsNonNullCollection() {
         ResourceDTOCollection result = api.getResources(null);
         assertThat(result).isNotNull();
-        System.out.println(result);
-        if (result.getObjects() != null) {
-            result.getObjects().forEach(System.out::println);
-        }
     }
 
     @Test
