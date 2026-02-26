@@ -48,4 +48,5 @@ public class OpenNmsRestClient {
             throw new OpenNmsClientException("POST " + uri + " failed: " + ex.getStatusCode(), ex);
         }
     }
+
 }
