@@ -31,6 +31,26 @@ class ResourcesApiTest {
         api = new ResourcesApi(restClient);
     }
 
+    // --- ResourceDTOCollection JSON mapping ---
+
+    /*
+    @Test
+    void resourceDTOCollection_deserializesResourceField() throws Exception {
+        String json = "{\"resource\":[{\"id\":\"node1\"}],\"totalCount\":1,\"count\":1,\"offset\":0}";
+        ResourceDTOCollection result = new ObjectMapper().readValue(json, ResourceDTOCollection.class);
+        assertThat(result.getObjects()).hasSize(1);
+        assertThat(result.getObjects().get(0).getId()).isEqualTo("node1");
+        assertThat(result.getTotalCount()).isEqualTo(1);
+    }
+
+    @Test
+    void resourceDTOCollection_objectsIsNullWhenResourceFieldAbsent() throws Exception {
+        String json = "{\"totalCount\":0,\"count\":0,\"offset\":0}";
+        ResourceDTOCollection result = new ObjectMapper().readValue(json, ResourceDTOCollection.class);
+        assertThat(result.getObjects()).isNull();
+    }
+     */
+
     // --- getResourceById ---
 
     @Test

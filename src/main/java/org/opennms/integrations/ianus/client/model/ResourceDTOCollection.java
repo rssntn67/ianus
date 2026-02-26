@@ -10,7 +10,7 @@ import java.util.Objects;
  * ResourceDTOCollection
  */
 public class ResourceDTOCollection {
-  @JsonProperty("objects")
+  @JsonProperty("resource")
   private List<ResourceDTO> objects = null;
 
   @JsonProperty("totalCount")
