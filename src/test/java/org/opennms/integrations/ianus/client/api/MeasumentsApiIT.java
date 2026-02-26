@@ -24,9 +24,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  *     -Dopennms.base-url=http://localhost:8980/opennms/rest \
  *     -Dopennms.username=admin \
  *     -Dopennms.password=admin \
- *     -Dopennms.it.resource.id=node[1].nodeSnmp[] \
- *     -Dopennms.it.attribute=ifInOctets \
- *     -Dopennms.it.filter.name=chomp
+t *     -Dopennms.it.resource.id=node[selfmonitor:1].nodeSnmp[] \
+ *     -Dopennms.it.attribute=OnmsEventCount \
+ *     -Dopennms.it.filter.name=Chomp
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @EnabledIfSystemProperty(named = "opennms.it.enabled", matches = "true")

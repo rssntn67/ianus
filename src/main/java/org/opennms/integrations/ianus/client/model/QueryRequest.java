@@ -1,5 +1,6 @@
 package org.opennms.integrations.ianus.client.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -9,8 +10,7 @@ import java.util.Objects;
 /**
  * QueryRequest
  */
-
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class QueryRequest {
   @JsonProperty("start")
   private Long start = null;
