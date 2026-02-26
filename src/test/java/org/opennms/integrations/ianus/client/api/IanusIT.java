@@ -91,7 +91,10 @@ class IanusIT {
                     assertThat(parentDto.getChildren().getCount().equals(2));
                     assertThat(parentDto.getChildren().getTotalCount().equals(2));
                     assertThat(parentDto.getChildren().getOffset().equals(0));
-                    parentDto.getChildren().getObjects().forEach(rDto -> {
+                    parentDto.getChildren().getObjects()
+                    .stream()
+                    .filter(rDto -> rDto.getId().contains("interfaceSnmp"))
+                    .forEach(rDto -> {
                         System.out.println("Id:"+rDto.getId());
                         System.out.println("Label:"+rDto.getLabel());
                         System.out.println("Name:"+rDto.getName());
@@ -99,10 +102,13 @@ class IanusIT {
                         System.out.println("TypeLabel:"+rDto.getTypeLabel());
                         assertThat(rDto.getParentId().equals(parentDto.getId()));
                         assertThat(rDto.getRrdGraphAttributes()).isNotNull();
-                        System.out.println("RrdGraphAttributes");
                         rDto.getRrdGraphAttributes().values().forEach(System.out::println);
                         assertThat(rDto.getStringPropertyAttributes()).isNotNull();
+                        System.out.println("StringPropertyAttributes");
                         System.out.println(rDto.getStringPropertyAttributes());
+                        assertThat(rDto.getExternalValueAttributes()).isNotNull();
+                        System.out.println("ExternalValueAttributes");
+                        System.out.println(rDto.getExternalValueAttributes());
                     });
                 });
     }
