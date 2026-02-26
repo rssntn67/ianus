@@ -70,15 +70,6 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<systemPropertyVariables>
-						<opennms.it.enabled>${opennms.it.enabled}</opennms.it.enabled>
-						<opennms.it.resource.id>${opennms.it.resource.id}</opennms.it.resource.id>
-						<opennms.it.attribute>${opennms.it.attribute}</opennms.it.attribute>
-						<opennms.it.node.criteria>${opennms.it.node.criteria}</opennms.it.node.criteria>
-						<opennms.it.filter.name>${opennms.it.filter.name}</opennms.it.filter.name>
-					</systemPropertyVariables>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
