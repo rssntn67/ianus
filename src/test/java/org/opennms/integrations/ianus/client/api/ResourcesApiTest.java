@@ -11,6 +11,7 @@ import org.opennms.integrations.ianus.client.handler.OpenNmsRestClient;
 import org.opennms.integrations.ianus.client.model.ResourceDTO;
 import org.opennms.integrations.ianus.client.model.ResourceDTOCollection;
 import org.springframework.core.ParameterizedTypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ class ResourcesApiTest {
 
     // --- ResourceDTOCollection JSON mapping ---
 
-    /*
+
     @Test
     void resourceDTOCollection_deserializesResourceField() throws Exception {
         String json = "{\"resource\":[{\"id\":\"node1\"}],\"totalCount\":1,\"count\":1,\"offset\":0}";
@@ -49,7 +50,6 @@ class ResourcesApiTest {
         ResourceDTOCollection result = new ObjectMapper().readValue(json, ResourceDTOCollection.class);
         assertThat(result.getObjects()).isNull();
     }
-     */
 
     // --- getResourceById ---
 
