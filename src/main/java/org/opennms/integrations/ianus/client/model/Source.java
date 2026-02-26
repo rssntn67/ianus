@@ -1,5 +1,6 @@
 package org.opennms.integrations.ianus.client.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
@@ -7,6 +8,7 @@ import java.util.Objects;
 /**
  * Source
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Source {
   @JsonProperty("label")
   private String label = null;

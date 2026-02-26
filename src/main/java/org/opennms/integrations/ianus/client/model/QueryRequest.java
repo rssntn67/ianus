@@ -30,13 +30,13 @@ public class QueryRequest {
   @JsonProperty("relaxed")
   private Boolean relaxed = null;
 
-  @JsonProperty("sources")
+  @JsonProperty("source")
   private List<Source> sources = null;
 
-  @JsonProperty("expressions")
+  @JsonProperty("expression")
   private List<Expression> expressions = null;
 
-  @JsonProperty("filters")
+  @JsonProperty("filter")
   private List<FilterDef> filters = null;
 
   @JsonProperty("maxRows")

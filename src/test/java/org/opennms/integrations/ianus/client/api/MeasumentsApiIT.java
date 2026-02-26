@@ -86,6 +86,7 @@ class MeasumentsApiIT {
                 .label("it-test");
 
         QueryRequest request = new QueryRequest()
+                .step(300_000L)
                 .addSourcesItem(source);
 
         QueryResponse result = api.query(request);
