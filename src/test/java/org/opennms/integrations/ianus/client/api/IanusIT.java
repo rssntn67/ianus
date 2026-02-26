@@ -114,10 +114,10 @@ class IanusIT {
     }
 
     @Test
-    void getMeasurement() {
+    void getResponseTimeMeasurementTest() {
         String resourceId = "node[14].responseTime[10.99.88.96]";
         var end= Instant.now().toEpochMilli();
-        var start= end-3600000;
+        var start= end-900000;
         System.out.println(start);
         System.out.println(end);
         System.out.println(-start+end);
@@ -126,7 +126,7 @@ class IanusIT {
             queryRequest.setStart(start);
             queryRequest.setEnd(end);
             queryRequest.setStep(300L);
-            queryRequest.setMaxRows(100);
+            queryRequest.setMaxRows(10);
             Source source = new Source();
             source.setResourceId(resourceId);
             source.setAttribute("icmp");
@@ -139,6 +139,40 @@ class IanusIT {
             System.out.println(queryResponse);
     }
 
+
+    @Test
+    void getSnmpMeasurementTest() {
+        String resourceId = "node[Home:2].interfaceSnmp[ether5-085531b9f9a7]";
+        var end= Instant.now().toEpochMilli();
+        var start= end-900000;
+        System.out.println(start);
+        System.out.println(end);
+        System.out.println(-start+end);
+        QueryRequest queryRequest = new QueryRequest();
+
+        queryRequest.setStart(start);
+        queryRequest.setEnd(end);
+        queryRequest.setStep(300L);
+        queryRequest.setMaxRows(20);
+        Source sourceOut = new Source();
+        sourceOut.setResourceId(resourceId);
+        sourceOut.setAttribute("ifHCOutOctets");
+        sourceOut.setLabel("ifHCOutOctets");
+        sourceOut.setTransient(false);
+        queryRequest.addSourcesItem(sourceOut);
+
+        Source sourceIn = new Source();
+        sourceIn.setResourceId(resourceId);
+        sourceIn.setAttribute("ifHCInOctets");
+        sourceIn.setLabel("ifHCInOctets");
+        sourceIn.setTransient(false);
+
+        queryRequest.addSourcesItem(sourceIn);
+
+        QueryResponse queryResponse =mApi.query(queryRequest);
+        System.out.println("-----QueryResponse------");
+        System.out.println(queryResponse);
+    }
 
 
 }
