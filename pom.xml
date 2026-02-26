@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<!-- IT test master switch; override with -Dopennms.it.enabled=true -->
+		<opennms.it.enabled>false</opennms.it.enabled>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -56,6 +58,30 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<systemPropertyVariables>
+						<opennms.it.enabled>${opennms.it.enabled}</opennms.it.enabled>
+						<opennms.it.resource.id>${opennms.it.resource.id}</opennms.it.resource.id>
+						<opennms.it.attribute>${opennms.it.attribute}</opennms.it.attribute>
+						<opennms.it.node.criteria>${opennms.it.node.criteria}</opennms.it.node.criteria>
+						<opennms.it.filter.name>${opennms.it.filter.name}</opennms.it.filter.name>
+						<opennms.base-url>${opennms.base-url}</opennms.base-url>
+						<opennms.username>${opennms.username}</opennms.username>
+						<opennms.password>${opennms.password}</opennms.password>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
