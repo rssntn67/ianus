@@ -41,19 +41,70 @@ class IanusIT {
     }
 
     @Test
-    void getResources_returnsNonNullCollection() {
+    void getResourcesIcmpTest() {
         ResourceDTOCollection result = rApi.getResources(null);
         assertThat(result).isNotNull();
         assertThat(result.getObjects()).isNotNull();
-        result.getObjects().forEach( o -> o.getChildren().getObjects().forEach( c -> {
-            System.out.println("----------------");
-            System.out.println(c.getId());
-            System.out.println(c.getLabel());
-            System.out.println(c.getName());
-            System.out.println(c.getParentId());
-            System.out.println(c.getLink());
-            System.out.println(c.getTypeLabel());
-        }));
+        System.out.println("Count: " + result.getCount());
+        System.out.println("TotalCount: " + result.getTotalCount());
+        System.out.println("Offset: " + result.getOffset());
+        result.getObjects().stream()
+                .filter(parentDto -> parentDto.getLabel().equals("10.99.77.103"))
+                .forEach(parentDto -> {
+                    assertThat(parentDto.getId().equals("node[Home:79]"));
+                    assertThat(parentDto.getName().equals("Home:79"));
+                    assertThat(parentDto.getLink().equals("element/node.jsp?node=Home:79"));
+                    assertThat(parentDto.getTypeLabel().equals("Node"));
+                    assertThat(parentDto.getChildren()).isNotNull();
+                    assertThat(parentDto.getChildren().getCount().equals(2));
+                    assertThat(parentDto.getChildren().getTotalCount().equals(2));
+                    assertThat(parentDto.getChildren().getOffset().equals(0));
+                    parentDto.getChildren().getObjects().forEach(rDto -> {
+                        System.out.println("Id:"+rDto.getId());
+                        System.out.println("Label:"+rDto.getLabel());
+                        System.out.println("Name:"+rDto.getName());
+                        System.out.println("Link:"+rDto.getLink());
+                        System.out.println("TypeLabel:"+rDto.getTypeLabel());
+                        assertThat(rDto.getParentId().equals(parentDto.getId()));
+                        assertThat(rDto.getRrdGraphAttributes()).isNotNull();
+                        rDto.getRrdGraphAttributes().values().forEach(System.out::println);
+                    });
+                });
+    }
+
+    @Test
+    void getResourcesSnmpTest() {
+        ResourceDTOCollection result = rApi.getResources(null);
+        assertThat(result).isNotNull();
+        assertThat(result.getObjects()).isNotNull();
+        System.out.println("Count: " + result.getCount());
+        System.out.println("TotalCount: " + result.getTotalCount());
+        System.out.println("Offset: " + result.getOffset());
+        result.getObjects().stream()
+                .filter(parentDto -> parentDto.getLabel().equals("_gateway"))
+                .forEach(parentDto -> {
+                    assertThat(parentDto.getId().equals("node[Home:2]"));
+                    assertThat(parentDto.getName().equals("Home:2"));
+                    assertThat(parentDto.getLink().equals("element/node.jsp?node=Home:2"));
+                    assertThat(parentDto.getTypeLabel().equals("Node"));
+                    assertThat(parentDto.getChildren()).isNotNull();
+                    assertThat(parentDto.getChildren().getCount().equals(2));
+                    assertThat(parentDto.getChildren().getTotalCount().equals(2));
+                    assertThat(parentDto.getChildren().getOffset().equals(0));
+                    parentDto.getChildren().getObjects().forEach(rDto -> {
+                        System.out.println("Id:"+rDto.getId());
+                        System.out.println("Label:"+rDto.getLabel());
+                        System.out.println("Name:"+rDto.getName());
+                        System.out.println("Link:"+rDto.getLink());
+                        System.out.println("TypeLabel:"+rDto.getTypeLabel());
+                        assertThat(rDto.getParentId().equals(parentDto.getId()));
+                        assertThat(rDto.getRrdGraphAttributes()).isNotNull();
+                        System.out.println("RrdGraphAttributes");
+                        rDto.getRrdGraphAttributes().values().forEach(System.out::println);
+                        assertThat(rDto.getStringPropertyAttributes()).isNotNull();
+                        System.out.println(rDto.getStringPropertyAttributes());
+                    });
+                });
     }
 
     @Test
