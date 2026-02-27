@@ -8,10 +8,13 @@ import org.opennms.integrations.ianus.client.model.QueryRequest;
 import org.opennms.integrations.ianus.client.model.QueryResponse;
 import org.opennms.integrations.ianus.client.model.ResourceDTOCollection;
 import org.opennms.integrations.ianus.client.model.Source;
+import org.opennms.integrations.ianus.collector.PerformanceCollector;
+import org.opennms.integrations.ianus.controller.IanusPerformanceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,6 +33,9 @@ class IanusIT {
 
     @Autowired
     private OpenNmsRestClient restClient;
+
+    @Autowired
+    private PerformanceCollector performanceCollector;
 
     private ResourcesApi rApi;
     private MeasumentsApi mApi;
@@ -174,5 +180,20 @@ class IanusIT {
         System.out.println(queryResponse);
     }
 
+    @Test
+    void performanceCollectorTest() {
+        performanceCollector.collect();
+
+        assertThat(performanceCollector.getCache()).isNotEmpty();
+
+        System.out.println("Cache entries: " + performanceCollector.getCache().size());
+        performanceCollector.getCache().forEach((key, dtos) ->
+                System.out.println("  " + key + " -> " + dtos.size() + " measurements"));
+
+        List<IanusPerformanceDto> all = performanceCollector.getAll();
+        assertThat(all).isNotEmpty();
+        System.out.println("Total measurements: " + all.size());
+        all.stream().limit(5).forEach(System.out::println);
+    }
 
 }
