@@ -169,7 +169,7 @@ class IanusIT {
 
         queryRequest.addSourcesItem(sourceIn);
 
-        QueryResponse queryResponse =mApi.query(queryRequest);
+        QueryResponse queryResponse = mApi.query(queryRequest);
         System.out.println("-----QueryResponse------");
         System.out.println(queryResponse);
     }
