@@ -103,6 +103,12 @@ public class PerformanceCollector {
         return Collections.unmodifiableMap(cache);
     }
 
+    public List<IanusPerformanceDto> getAll() {
+        return cache.values().stream()
+                .flatMap(List::stream)
+                .toList();
+    }
+
     public List<IanusPerformanceDto> get(String resourceId, String attribute) {
         return cache.getOrDefault(resourceId + "::" + attribute, List.of());
     }

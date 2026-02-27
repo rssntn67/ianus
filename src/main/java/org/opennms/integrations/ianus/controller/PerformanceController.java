@@ -18,6 +18,19 @@ public class PerformanceController {
         this.collector = collector;
     }
 
+    @GetMapping("/performance/all")
+    public IanusPerformanceCollectionDto getAllPerformance(
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam(defaultValue = "10") int count) {
+
+        List<IanusPerformanceDto> all = collector.getAll();
+        int totalCount = all.size();
+        int fromIndex = Math.min(offset, totalCount);
+        int toIndex = Math.min(offset + count, totalCount);
+        List<IanusPerformanceDto> page = all.subList(fromIndex, toIndex);
+        return new IanusPerformanceCollectionDto(page.size(), offset, totalCount, page);
+    }
+
     @GetMapping("/performance")
     public IanusPerformanceCollectionDto getPerformance(
             @RequestParam String resourceId,
