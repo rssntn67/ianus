@@ -31,7 +31,7 @@ public class ResourcesApi {
     if (resourceId == null) {
       throw new OpenNmsClientException("Missing the required parameter 'resourceId' when calling getResourceById", new RuntimeException());
     }
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/resources/{resourceId}");
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/rest/resources/{resourceId}");
     if (depth != null) uriBuilder.queryParam("depth", depth);
     // create path and map variables
 
@@ -53,7 +53,7 @@ public class ResourcesApi {
     if (nodeCriteria == null) {
       throw new OpenNmsClientException("Missing the required parameter 'nodeCriteria' when calling getResourceForNode", new RuntimeException());
     }
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/resources/fornode/{nodeCriteria}");
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/rest/resources/fornode/{nodeCriteria}");
     if (depth != null) uriBuilder.queryParam("depth", depth);
 
     return apiClient.get(uriBuilder.buildAndExpand(nodeCriteria).toUriString(),ResourceDTO.class);
@@ -66,7 +66,7 @@ public class ResourcesApi {
    * @throws OpenNmsClientException if fails to make API call
    */
   public ResourceDTOCollection getResources(Integer depth) throws OpenNmsClientException {
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/resources");
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/rest/resources");
     if (depth != null) uriBuilder.queryParam("depth", depth);
 
     return apiClient.get(uriBuilder.toUriString(), ResourceDTOCollection.class);
@@ -83,7 +83,7 @@ public class ResourcesApi {
    * @throws OpenNmsClientException if fails to make API call
    */
   public List<ResourceDTO> select(String nodes, String filterRules, String nodeSubresources, String stringProperties) throws OpenNmsClientException {
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/resources/select");
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/rest/resources/select");
     if (nodes != null) uriBuilder.queryParam("nodes", nodes);
     if (filterRules != null) uriBuilder.queryParam("filterRules", filterRules);
     if (nodeSubresources != null) uriBuilder.queryParam("nodeSubresources", nodeSubresources);

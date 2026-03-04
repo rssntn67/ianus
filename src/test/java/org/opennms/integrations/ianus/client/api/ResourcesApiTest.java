@@ -62,7 +62,7 @@ class ResourcesApiTest {
         ResourceDTO result = api.getResourceById("node1", null);
 
         assertThat(result).isSameAs(expected);
-        assertThat(pathCaptor.getValue()).isEqualTo("/resources/node1");
+        assertThat(pathCaptor.getValue()).isEqualTo("/rest/resources/node1");
     }
 
     @Test
@@ -91,7 +91,7 @@ class ResourcesApiTest {
 
         api.getResourceForNode("node1", null);
 
-        assertThat(pathCaptor.getValue()).isEqualTo("/resources/fornode/node1");
+        assertThat(pathCaptor.getValue()).isEqualTo("/rest/resources/fornode/node1");
     }
 
     @Test
@@ -122,7 +122,7 @@ class ResourcesApiTest {
         ResourceDTOCollection result = api.getResources(null);
 
         assertThat(result).isSameAs(expected);
-        assertThat(pathCaptor.getValue()).isEqualTo("/resources");
+        assertThat(pathCaptor.getValue()).isEqualTo("/rest/resources");
     }
 
     @Test
@@ -144,7 +144,7 @@ class ResourcesApiTest {
 
         api.select(null, null, null, null);
 
-        assertThat(pathCaptor.getValue()).isEqualTo("/resources/select");
+        assertThat(pathCaptor.getValue()).isEqualTo("/rest/resources/select");
     }
 
     @Test

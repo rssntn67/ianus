@@ -26,7 +26,7 @@ public class MeasumentsApi {
    * @throws OpenNmsClientException if fails to make API call
    */
   public List<FilterMetaData> getFilterMetadata() throws OpenNmsClientException {
-    return apiClient.get("/measurements/filters", ParameterizedTypeReference.forType(
+    return apiClient.get("/rest/measurements/filters", ParameterizedTypeReference.forType(
         ResolvableType.forClassWithGenerics(List.class, FilterMetaData.class).getType()));
   }
   /**
@@ -40,7 +40,7 @@ public class MeasumentsApi {
     if (name == null) {
       throw new OpenNmsClientException("Missing the required parameter 'name' when calling getFilterMetadata1", new RuntimeException());
     }
-    String localVarPath = UriComponentsBuilder.fromPath("/measurements/filters/{name}")
+    String localVarPath = UriComponentsBuilder.fromPath("/rest/measurements/filters/{name}")
       .buildAndExpand(name)
       .toUriString();
 
@@ -54,7 +54,7 @@ public class MeasumentsApi {
    * @throws OpenNmsClientException if fails to make API call
    */
   public QueryResponse query(QueryRequest body) throws OpenNmsClientException {
-    String localVarPath = "/measurements";
+    String localVarPath = "/rest/measurements";
 
     return apiClient.post(localVarPath, body, QueryResponse.class);
   }
@@ -83,7 +83,7 @@ public class MeasumentsApi {
       throw new OpenNmsClientException("Missing the required parameter 'attribute' when calling simpleQuery", new RuntimeException());
     }
     // query params
-    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/measurements/{resourceId}/{attribute}");
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/rest/measurements/{resourceId}/{attribute}");
     if (start != null)             uriBuilder.queryParam("start", start);
     if (end != null)               uriBuilder.queryParam("end", end);
     if (step != null)              uriBuilder.queryParam("step", step);
