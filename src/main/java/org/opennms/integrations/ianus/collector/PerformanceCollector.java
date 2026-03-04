@@ -88,7 +88,7 @@ public class PerformanceCollector {
     private void storeResponse(String resourceId, QueryResponse response) {
         List<Long> timestamps = response.getTimestamps();
         List<String> labels = response.getLabels();
-        if (timestamps == null || labels == null || response.getColumns() == null) return;
+        if (timestamps == null || labels == null || response.getColumns() == null || timestamps.size() < 2) return;
 
         for (int col = 0; col < labels.size(); col++) {
             String metric = labels.get(col);
@@ -96,8 +96,14 @@ public class PerformanceCollector {
             if (values == null) continue;
 
             List<IanusPerformanceDto> dtos = new ArrayList<>();
-            for (int i = 0; i < timestamps.size() && i < values.size(); i++) {
-                dtos.add(new IanusPerformanceDto(timestamps.get(i), metric, resourceId, values.get(i)));
+            for (int i = 1; i < timestamps.size() && i < values.size(); i++) {
+                Double v1 = values.get(i - 1);
+                Double v2 = values.get(i);
+                if (v1 == null || v2 == null || v1.isNaN() || v2.isNaN()) continue;
+                long dt = timestamps.get(i) - timestamps.get(i - 1);
+                if (dt == 0) continue;
+                double rate = (v2 - v1) / (dt / 1000.0);
+                dtos.add(new IanusPerformanceDto(timestamps.get(i), metric, resourceId, rate));
             }
             cache.put(resourceId + "::" + metric, dtos);
         }
