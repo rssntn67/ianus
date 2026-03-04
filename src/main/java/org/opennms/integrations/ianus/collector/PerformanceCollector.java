@@ -1,11 +1,13 @@
 package org.opennms.integrations.ianus.collector;
 
 import org.opennms.integrations.ianus.client.api.MeasumentsApi;
+import org.opennms.integrations.ianus.client.api.NodesApi;
 import org.opennms.integrations.ianus.client.api.ResourcesApi;
 import org.opennms.integrations.ianus.client.handler.OpenNmsRestClient;
+import org.opennms.integrations.ianus.client.model.OnmsNodeList;
 import org.opennms.integrations.ianus.client.model.QueryRequest;
 import org.opennms.integrations.ianus.client.model.QueryResponse;
-import org.opennms.integrations.ianus.client.model.ResourceDTOCollection;
+import org.opennms.integrations.ianus.client.model.ResourceDTO;
 import org.opennms.integrations.ianus.client.model.Source;
 import org.opennms.integrations.ianus.controller.IanusPerformanceDto;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,6 +34,7 @@ public class PerformanceCollector {
 
     private final ResourcesApi resourcesApi;
     private final MeasumentsApi measumentsApi;
+    private final NodesApi nodesApi;
 
     private final ConcurrentHashMap<String, List<IanusPerformanceDto>> cache =
             new ConcurrentHashMap<>();
@@ -39,24 +42,24 @@ public class PerformanceCollector {
     public PerformanceCollector(OpenNmsRestClient restClient) {
         this.resourcesApi = new ResourcesApi(restClient);
         this.measumentsApi = new MeasumentsApi(restClient);
+        this.nodesApi = new NodesApi(restClient);
     }
 
     @Scheduled(fixedDelayString = "${opennms.collector.interval-ms:300000}")
     public void collect() {
-        ResourceDTOCollection all = resourcesApi.getResources(null);
-        if (all == null || all.getObjects() == null) return;
+        OnmsNodeList nodes = nodesApi.getAllNodes();
+        nodes.getObjects().forEach(node -> {
+            ResourceDTO nodeDto = resourcesApi.getResourceForNode(node.getNodeId(),3);
 
-        long end = Instant.now().toEpochMilli();
-        long start = end - 900_000L;
+            long end = Instant.now().toEpochMilli();
+            long start = end - 900_000L;
 
-        all.getObjects().stream()
-                .filter(node -> node.getChildren() != null && node.getChildren().getObjects() != null)
-                .flatMap(node -> node.getChildren().getObjects().stream())
+                nodeDto.getChildren().getObjects().stream()
                 .filter(r -> r.getId() != null && r.getId().contains("interfaceSnmp"))
-                .forEach(resource -> collectResource(resource.getId(), start, end));
+                .forEach(resource -> collectResource(resource, start, end));});
     }
 
-    private void collectResource(String resourceId, long start, long end) {
+    private void collectResource(ResourceDTO resource, long start, long end) {
         QueryRequest request = new QueryRequest();
         request.setStart(start);
         request.setEnd(end);
@@ -64,18 +67,19 @@ public class PerformanceCollector {
         request.setMaxRows(20);
         request.setRelaxed(true);
 
-        for (String attr : SNMP_ATTRIBUTES) {
+        resource.getRrdGraphAttributes().keySet().stream().filter(SNMP_ATTRIBUTES::contains).forEach(k -> {
             Source source = new Source();
-            source.setResourceId(resourceId);
-            source.setAttribute(attr);
-            source.setLabel(attr);
+            source.setResourceId(resource.getId());
+            source.setAttribute(k);
+            source.setLabel(k);
             source.setTransient(false);
             request.addSourcesItem(source);
-        }
+        });
+
 
         try {
             QueryResponse response = measumentsApi.query(request);
-            storeResponse(resourceId, response);
+            storeResponse(resource.getId(), response);
         } catch (Exception e) {
             // log and continue with other resources
         }
