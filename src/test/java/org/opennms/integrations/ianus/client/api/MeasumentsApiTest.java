@@ -37,13 +37,13 @@ class MeasumentsApiTest {
     @Test
     void getFilterMetadata_delegatesToGetWithCorrectPath() {
         List<FilterMetaData> expected = List.of(new FilterMetaData().name("foo"));
-        when(restClient.get(eq("/measurements/filters"), any(ParameterizedTypeReference.class)))
+        when(restClient.get(eq("/rest/measurements/filters"), any(ParameterizedTypeReference.class)))
                 .thenReturn(expected);
 
         List<FilterMetaData> result = api.getFilterMetadata();
 
         assertThat(result).isSameAs(expected);
-        verify(restClient).get(eq("/measurements/filters"), any(ParameterizedTypeReference.class));
+        verify(restClient).get(eq("/rest/measurements/filters"), any(ParameterizedTypeReference.class));
     }
 
     // --- getFilterMetadata1 ---
@@ -57,7 +57,7 @@ class MeasumentsApiTest {
         FilterMetaData result = api.getFilterMetadata1("bar");
 
         assertThat(result).isSameAs(expected);
-        assertThat(pathCaptor.getValue()).isEqualTo("/measurements/filters/bar");
+        assertThat(pathCaptor.getValue()).isEqualTo("/rest/measurements/filters/bar");
     }
 
     @Test
@@ -73,17 +73,17 @@ class MeasumentsApiTest {
     void query_delegatesToPostWithCorrectPathAndBody() {
         QueryRequest request = new QueryRequest().start(0L).end(3_600_000L);
         QueryResponse expected = new QueryResponse().step(300L);
-        when(restClient.post("/measurements", request, QueryResponse.class)).thenReturn(expected);
+        when(restClient.post("/rest/measurements", request, QueryResponse.class)).thenReturn(expected);
 
         QueryResponse result = api.query(request);
 
         assertThat(result).isSameAs(expected);
-        verify(restClient).post("/measurements", request, QueryResponse.class);
+        verify(restClient).post("/rest/measurements", request, QueryResponse.class);
     }
 
     @Test
     void query_acceptsNullBody() {
-        when(restClient.post("/measurements", null, QueryResponse.class)).thenReturn(new QueryResponse());
+        when(restClient.post("/rest/measurements", null, QueryResponse.class)).thenReturn(new QueryResponse());
         assertThatCode(() -> api.query(null)).doesNotThrowAnyException();
     }
 
@@ -96,7 +96,7 @@ class MeasumentsApiTest {
 
         api.simpleQuery("node1", "ifInOctets", null, null, null, null, null, null, null);
 
-        assertThat(pathCaptor.getValue()).isEqualTo("/measurements/node1/ifInOctets");
+        assertThat(pathCaptor.getValue()).isEqualTo("/rest/measurements/node1/ifInOctets");
     }
 
     @Test
@@ -108,7 +108,7 @@ class MeasumentsApiTest {
 
         String uri = pathCaptor.getValue();
         assertThat(uri)
-                .contains("/measurements/node1/ifInOctets")
+                .contains("/rest/measurements/node1/ifInOctets")
                 .contains("start=1000")
                 .contains("end=2000")
                 .contains("step=300")
