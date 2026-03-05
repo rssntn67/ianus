@@ -1,6 +1,6 @@
 package it.ianus.plugin.controller;
 
-public record IanusPerformanceDto(
+public record IanusMetricsDto(
         long timestamp,
         String metric,
         String instance,

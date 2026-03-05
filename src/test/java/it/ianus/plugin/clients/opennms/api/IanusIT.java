@@ -9,7 +9,7 @@ import it.ianus.plugin.clients.opennms.model.QueryResponse;
 import it.ianus.plugin.clients.opennms.model.ResourceDTOCollection;
 import it.ianus.plugin.clients.opennms.model.Source;
 import it.ianus.plugin.collectors.OpenNMSCollector;
-import it.ianus.plugin.controller.IanusPerformanceDto;
+import it.ianus.plugin.controller.IanusMetricsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -190,7 +190,7 @@ class IanusIT {
         performanceCollector.getCache().forEach((key, dtos) ->
                 System.out.println("  " + key + " -> " + dtos.size() + " measurements"));
 
-        List<IanusPerformanceDto> all = performanceCollector.getAll();
+        List<IanusMetricsDto> all = performanceCollector.getAll();
         assertThat(all).isNotEmpty();
         System.out.println("Total measurements: " + all.size());
         all.stream().limit(5).forEach(System.out::println);

@@ -9,7 +9,7 @@ import it.ianus.plugin.clients.opennms.model.QueryRequest;
 import it.ianus.plugin.clients.opennms.model.QueryResponse;
 import it.ianus.plugin.clients.opennms.model.ResourceDTO;
 import it.ianus.plugin.clients.opennms.model.Source;
-import it.ianus.plugin.controller.IanusPerformanceDto;
+import it.ianus.plugin.controller.IanusMetricsDto;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class OpenNMSCollector {
     private final MeasumentsApi measumentsApi;
     private final NodesApi nodesApi;
 
-    private final ConcurrentHashMap<String, List<IanusPerformanceDto>> cache =
+    private final ConcurrentHashMap<String, List<IanusMetricsDto>> cache =
             new ConcurrentHashMap<>();
 
     public OpenNMSCollector(OpenNmsRestClient restClient) {
@@ -98,7 +98,7 @@ public class OpenNMSCollector {
             List<Double> values = response.getColumns().get(col).getList();
             if (values == null) continue;
 
-            List<IanusPerformanceDto> dtos = new ArrayList<>();
+            List<IanusMetricsDto> dtos = new ArrayList<>();
             for (int i = 1; i < timestamps.size() && i < values.size(); i++) {
                 Double v1 = values.get(i - 1);
                 Double v2 = values.get(i);
@@ -106,23 +106,23 @@ public class OpenNMSCollector {
                 long dt = timestamps.get(i) - timestamps.get(i - 1);
                 if (dt == 0) continue;
                 double rate = (v2 - v1) / (dt / 1000.0);
-                dtos.add(new IanusPerformanceDto(timestamps.get(i), metric, resourceId, rate));
+                dtos.add(new IanusMetricsDto(timestamps.get(i), metric, resourceId, rate));
             }
             cache.put(resourceId + "::" + metric, dtos);
         }
     }
 
-    public Map<String, List<IanusPerformanceDto>> getCache() {
+    public Map<String, List<IanusMetricsDto>> getCache() {
         return Collections.unmodifiableMap(cache);
     }
 
-    public List<IanusPerformanceDto> getAll() {
+    public List<IanusMetricsDto> getAll() {
         return cache.values().stream()
                 .flatMap(List::stream)
                 .toList();
     }
 
-    public List<IanusPerformanceDto> get(String resourceId, String attribute) {
+    public List<IanusMetricsDto> get(String resourceId, String attribute) {
         return cache.getOrDefault(resourceId + "::" + attribute, List.of());
     }
 }

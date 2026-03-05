@@ -6,7 +6,7 @@ import it.ianus.plugin.clients.prometheus.handler.PrometheusRestClient;
 import it.ianus.plugin.clients.prometheus.model.InstantQueryResult;
 import it.ianus.plugin.clients.prometheus.model.PrometheusResponse;
 import it.ianus.plugin.clients.prometheus.model.VectorSample;
-import it.ianus.plugin.controller.PrometheusMetricDto;
+import it.ianus.plugin.controller.IanusMetricsDto;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -24,7 +24,7 @@ public class PrometheusCollector {
     private final PrometheusProperties properties;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final ConcurrentHashMap<String, List<PrometheusMetricDto>> cache =
+    private final ConcurrentHashMap<String, List<IanusMetricsDto>> cache =
             new ConcurrentHashMap<>();
 
     public PrometheusCollector(PrometheusRestClient restClient, PrometheusProperties properties) {
@@ -51,7 +51,7 @@ public class PrometheusCollector {
     private void storeResult(String query, InstantQueryResult result) {
         if (result.getResult() == null) return;
 
-        List<PrometheusMetricDto> dtos = new ArrayList<>();
+        List<IanusMetricsDto> dtos = new ArrayList<>();
         for (VectorSample sample : result.getResult()) {
             if (sample.getValue() == null || sample.getValue().size() < 2) continue;
 
@@ -65,23 +65,26 @@ public class PrometheusCollector {
             String metricName = sample.getMetric() != null
                     ? sample.getMetric().getOrDefault("__name__", query)
                     : query;
+            String instance = sample.getMetric() != null
+                    ? sample.getMetric().getOrDefault("instance", "")
+                    : "";
 
-            dtos.add(new PrometheusMetricDto(timestamp, metricName, sample.getMetric(), value));
+            dtos.add(new IanusMetricsDto(timestamp, metricName, instance, value));
         }
         cache.put(query, dtos);
     }
 
-    public Map<String, List<PrometheusMetricDto>> getCache() {
+    public Map<String, List<IanusMetricsDto>> getCache() {
         return Collections.unmodifiableMap(cache);
     }
 
-    public List<PrometheusMetricDto> getAll() {
+    public List<IanusMetricsDto> getAll() {
         return cache.values().stream()
                 .flatMap(List::stream)
                 .toList();
     }
 
-    public List<PrometheusMetricDto> get(String metric) {
+    public List<IanusMetricsDto> get(String metric) {
         return cache.getOrDefault(metric, List.of());
     }
 }

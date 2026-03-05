@@ -19,30 +19,30 @@ public class OpenNMSController {
     }
 
     @GetMapping("/metrics/all")
-    public IanusPerformanceCollectionDto getAllMetrics(
+    public IanusMetricsCollectionDto getAllMetrics(
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 
-        List<IanusPerformanceDto> all = collector.getAll();
+        List<IanusMetricsDto> all = collector.getAll();
         int totalCount = all.size();
         int fromIndex = Math.min(offset, totalCount);
         int toIndex = Math.min(offset + count, totalCount);
-        List<IanusPerformanceDto> page = all.subList(fromIndex, toIndex);
-        return new IanusPerformanceCollectionDto(page.size(), offset, totalCount, page);
+        List<IanusMetricsDto> page = all.subList(fromIndex, toIndex);
+        return new IanusMetricsCollectionDto(page.size(), offset, totalCount, page);
     }
 
     @GetMapping("/metrics")
-    public IanusPerformanceCollectionDto getMetrics(
+    public IanusMetricsCollectionDto getMetrics(
             @RequestParam String resourceId,
             @RequestParam String attribute,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 
-        List<IanusPerformanceDto> all = collector.get(resourceId, attribute);
+        List<IanusMetricsDto> all = collector.get(resourceId, attribute);
         int totalCount = all.size();
         int fromIndex = Math.min(offset, totalCount);
         int toIndex = Math.min(offset + count, totalCount);
-        List<IanusPerformanceDto> page = all.subList(fromIndex, toIndex);
-        return new IanusPerformanceCollectionDto(page.size(), offset, totalCount, page);
+        List<IanusMetricsDto> page = all.subList(fromIndex, toIndex);
+        return new IanusMetricsCollectionDto(page.size(), offset, totalCount, page);
     }
 }

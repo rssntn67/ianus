@@ -27,30 +27,30 @@ public class PrometheusController {
     }
 
     @GetMapping("/metrics/all")
-    public PrometheusMetricCollectionDto getAllMetrics(
+    public IanusMetricsCollectionDto getAllMetrics(
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 
-        List<PrometheusMetricDto> all = collector.getAll();
+        List<IanusMetricsDto> all = collector.getAll();
         int totalCount = all.size();
         int fromIndex = Math.min(offset, totalCount);
         int toIndex = Math.min(offset + count, totalCount);
-        List<PrometheusMetricDto> page = all.subList(fromIndex, toIndex);
-        return new PrometheusMetricCollectionDto(page.size(), offset, totalCount, page);
+        List<IanusMetricsDto> page = all.subList(fromIndex, toIndex);
+        return new IanusMetricsCollectionDto(page.size(), offset, totalCount, page);
     }
 
     @GetMapping("/metrics")
-    public PrometheusMetricCollectionDto getMetrics(
+    public IanusMetricsCollectionDto getMetrics(
             @RequestParam String metric,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 
-        List<PrometheusMetricDto> all = collector.get(metric);
+        List<IanusMetricsDto> all = collector.get(metric);
         int totalCount = all.size();
         int fromIndex = Math.min(offset, totalCount);
         int toIndex = Math.min(offset + count, totalCount);
-        List<PrometheusMetricDto> page = all.subList(fromIndex, toIndex);
-        return new PrometheusMetricCollectionDto(page.size(), offset, totalCount, page);
+        List<IanusMetricsDto> page = all.subList(fromIndex, toIndex);
+        return new IanusMetricsCollectionDto(page.size(), offset, totalCount, page);
     }
 
     @GetMapping("/targets")

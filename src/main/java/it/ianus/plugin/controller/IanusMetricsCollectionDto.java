@@ -2,9 +2,9 @@ package it.ianus.plugin.controller;
 
 import java.util.List;
 
-public record PrometheusMetricCollectionDto(
+public record IanusMetricsCollectionDto(
         int count,
         int offset,
         int totalCount,
-        List<PrometheusMetricDto> metrics
+        List<IanusMetricsDto> performances
 ) {}
