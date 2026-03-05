@@ -58,6 +58,7 @@ package org.opennms.integrations.ianus.prometheus;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import it.ianus.plugin.prometheus.PrometheusProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -148,12 +149,13 @@ public class PrometheusClientException extends RuntimeException {
 ```java
 package org.opennms.integrations.ianus.prometheus.client.handler;
 
+import it.ianus.plugin.prometheus.client.handler.PrometheusClientException;
+import it.ianus.plugin.prometheus.client.handler.PrometheusRestClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
@@ -165,9 +167,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class PrometheusRestClientTest {
 
-    @Mock private RestClient restClient;
-    @Mock private RestClient.RequestHeadersUriSpec<?> requestHeadersUriSpec;
-    @Mock private RestClient.ResponseSpec responseSpec;
+    @Mock
+    private RestClient restClient;
+    @Mock
+    private RestClient.RequestHeadersUriSpec<?> requestHeadersUriSpec;
+    @Mock
+    private RestClient.ResponseSpec responseSpec;
 
     private PrometheusRestClient client;
 
@@ -213,6 +218,7 @@ Expected: FAIL (class not found)
 ```java
 package org.opennms.integrations.ianus.prometheus.client.handler;
 
+import it.ianus.plugin.prometheus.client.handler.PrometheusClientException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -305,6 +311,11 @@ Test that Prometheus JSON responses map correctly to our model classes. Key JSON
 ```java
 package org.opennms.integrations.ianus.prometheus.client.model;
 
+import it.ianus.plugin.prometheus.client.model.Alert;
+import it.ianus.plugin.prometheus.client.model.InstantQueryResult;
+import it.ianus.plugin.prometheus.client.model.PrometheusResponse;
+import it.ianus.plugin.prometheus.client.model.RangeQueryResult;
+import it.ianus.plugin.prometheus.client.model.TargetResult;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.ObjectMapper;
 
@@ -476,14 +487,15 @@ git commit -m "feat(prometheus): add Jackson model classes for Prometheus API re
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
+import it.ianus.plugin.prometheus.client.api.QueryApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -492,7 +504,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class QueryApiTest {
 
-    @Mock private PrometheusRestClient restClient;
+    @Mock
+    private PrometheusRestClient restClient;
 
     private QueryApi api;
 
@@ -538,8 +551,8 @@ Expected: FAIL
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class QueryApi {
@@ -595,14 +608,15 @@ git commit -m "feat(prometheus): add QueryApi for instant and range queries"
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
+import it.ianus.plugin.prometheus.client.api.MetadataApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -611,7 +625,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MetadataApiTest {
 
-    @Mock private PrometheusRestClient restClient;
+    @Mock
+    private PrometheusRestClient restClient;
 
     private MetadataApi api;
 
@@ -674,8 +689,8 @@ Expected: FAIL
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class MetadataApi {
@@ -737,17 +752,19 @@ git commit -m "feat(prometheus): add MetadataApi for labels, metadata, and serie
 **Step 1: Write failing tests**
 
 TargetsApiTest:
+
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
+import it.ianus.plugin.prometheus.client.api.TargetsApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -756,11 +773,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TargetsApiTest {
 
-    @Mock private PrometheusRestClient restClient;
+    @Mock
+    private PrometheusRestClient restClient;
     private TargetsApi api;
 
     @BeforeEach
-    void setUp() { api = new TargetsApi(restClient); }
+    void setUp() {
+        api = new TargetsApi(restClient);
+    }
 
     @Test
     void getTargets_callsCorrectPath() {
@@ -775,17 +795,19 @@ class TargetsApiTest {
 ```
 
 AlertsApiTest:
+
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
+import it.ianus.plugin.prometheus.client.api.AlertsApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -794,11 +816,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AlertsApiTest {
 
-    @Mock private PrometheusRestClient restClient;
+    @Mock
+    private PrometheusRestClient restClient;
     private AlertsApi api;
 
     @BeforeEach
-    void setUp() { api = new AlertsApi(restClient); }
+    void setUp() {
+        api = new AlertsApi(restClient);
+    }
 
     @Test
     void getAlerts_callsCorrectPath() {
@@ -830,11 +855,12 @@ Expected: FAIL
 **Step 3: Create TargetsApi and AlertsApi**
 
 TargetsApi:
+
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 
 public class TargetsApi {
 
@@ -851,11 +877,12 @@ public class TargetsApi {
 ```
 
 AlertsApi:
+
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 
 public class AlertsApi {
 
@@ -903,17 +930,18 @@ git commit -m "feat(prometheus): add TargetsApi and AlertsApi"
 ```java
 package org.opennms.integrations.ianus.prometheus.collector;
 
+import it.ianus.plugin.prometheus.collector.PrometheusCollector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.opennms.integrations.ianus.prometheus.PrometheusProperties;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.InstantQueryResult;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
-import org.opennms.integrations.ianus.prometheus.client.model.VectorSample;
-import org.opennms.integrations.ianus.prometheus.controller.PrometheusMetricDto;
+import prometheus.it.ianus.plugin.PrometheusProperties;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.InstantQueryResult;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
+import model.client.prometheus.it.ianus.plugin.VectorSample;
+import controller.prometheus.it.ianus.plugin.PrometheusMetricDto;
 
 import java.util.List;
 import java.util.Map;
@@ -925,7 +953,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class PrometheusCollectorTest {
 
-    @Mock private PrometheusRestClient restClient;
+    @Mock
+    private PrometheusRestClient restClient;
 
     private PrometheusCollector collector;
 
@@ -985,13 +1014,13 @@ Pattern mirrors `PerformanceCollector` (see `src/main/java/org/opennms/integrati
 ```java
 package org.opennms.integrations.ianus.prometheus.collector;
 
-import org.opennms.integrations.ianus.prometheus.PrometheusProperties;
-import org.opennms.integrations.ianus.prometheus.client.api.QueryApi;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.InstantQueryResult;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
-import org.opennms.integrations.ianus.prometheus.client.model.VectorSample;
-import org.opennms.integrations.ianus.prometheus.controller.PrometheusMetricDto;
+import prometheus.it.ianus.plugin.PrometheusProperties;
+import api.client.prometheus.it.ianus.plugin.QueryApi;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.InstantQueryResult;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
+import model.client.prometheus.it.ianus.plugin.VectorSample;
+import controller.prometheus.it.ianus.plugin.PrometheusMetricDto;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -1108,6 +1137,8 @@ git commit -m "feat(prometheus): add PrometheusCollector with scheduled metric p
 ```java
 package org.opennms.integrations.ianus.prometheus.controller;
 
+import it.ianus.plugin.prometheus.controller.PrometheusMetricDto;
+
 import java.util.List;
 
 public record PrometheusMetricCollectionDto(
@@ -1115,7 +1146,8 @@ public record PrometheusMetricCollectionDto(
         int offset,
         int totalCount,
         List<PrometheusMetricDto> metrics
-) {}
+) {
+}
 ```
 
 **Step 2: Write failing test for PrometheusController**
@@ -1123,10 +1155,12 @@ public record PrometheusMetricCollectionDto(
 ```java
 package org.opennms.integrations.ianus.prometheus.controller;
 
+import it.ianus.plugin.prometheus.controller.PrometheusController;
+import it.ianus.plugin.prometheus.controller.PrometheusMetricDto;
 import org.junit.jupiter.api.Test;
-import org.opennms.integrations.ianus.prometheus.collector.PrometheusCollector;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
+import collector.prometheus.it.ianus.plugin.PrometheusCollector;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -1142,9 +1176,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PrometheusController.class)
 class PrometheusControllerTest {
 
-    @Autowired private MockMvc mockMvc;
-    @MockitoBean private PrometheusCollector collector;
-    @MockitoBean private PrometheusRestClient restClient;
+    @Autowired
+    private MockMvc mockMvc;
+    @MockitoBean
+    private PrometheusCollector collector;
+    @MockitoBean
+    private PrometheusRestClient restClient;
 
     @Test
     void getAllMetrics_returnsPaginatedResults() throws Exception {
@@ -1201,12 +1238,14 @@ Expected: FAIL
 ```java
 package org.opennms.integrations.ianus.prometheus.controller;
 
-import org.opennms.integrations.ianus.prometheus.client.api.AlertsApi;
-import org.opennms.integrations.ianus.prometheus.client.api.MetadataApi;
-import org.opennms.integrations.ianus.prometheus.client.api.TargetsApi;
-import org.opennms.integrations.ianus.prometheus.client.handler.PrometheusRestClient;
-import org.opennms.integrations.ianus.prometheus.client.model.PrometheusResponse;
-import org.opennms.integrations.ianus.prometheus.collector.PrometheusCollector;
+import api.client.prometheus.it.ianus.plugin.AlertsApi;
+import it.ianus.plugin.prometheus.controller.PrometheusMetricCollectionDto;
+import it.ianus.plugin.prometheus.controller.PrometheusMetricDto;
+import it.ianus.plugin.prometheus.client.api.MetadataApi;
+import api.client.prometheus.it.ianus.plugin.TargetsApi;
+import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
+import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
+import collector.prometheus.it.ianus.plugin.PrometheusCollector;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
