@@ -26,7 +26,6 @@ public class ResourcesApi {
    * @throws OpenNmsClientException if fails to make API call
    */
   public ResourceDTO getResourceById(String resourceId, Integer depth) throws OpenNmsClientException {
-    Object localVarPostBody = null;
     // verify the required parameter 'resourceId' is set
     if (resourceId == null) {
       throw new OpenNmsClientException("Missing the required parameter 'resourceId' when calling getResourceById", new RuntimeException());
@@ -48,7 +47,6 @@ public class ResourcesApi {
    * @throws OpenNmsClientException if fails to make API call
    */
   public ResourceDTO getResourceForNode(String nodeCriteria, Integer depth) throws OpenNmsClientException {
-    Object localVarPostBody = null;
     // verify the required parameter 'nodeCriteria' is set
     if (nodeCriteria == null) {
       throw new OpenNmsClientException("Missing the required parameter 'nodeCriteria' when calling getResourceForNode", new RuntimeException());
