@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
+import it.ianus.plugin.IanusApplication.PrometheusProperties;
 import it.ianus.plugin.clients.prometheus.handler.PrometheusRestClient;
 import it.ianus.plugin.clients.prometheus.model.PrometheusResponse;
 

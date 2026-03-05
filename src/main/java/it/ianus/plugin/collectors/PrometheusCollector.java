@@ -1,6 +1,6 @@
 package it.ianus.plugin.collectors;
 
-import it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
+import it.ianus.plugin.IanusApplication.PrometheusProperties;
 import it.ianus.plugin.clients.prometheus.api.QueryApi;
 import it.ianus.plugin.clients.prometheus.handler.PrometheusRestClient;
 import it.ianus.plugin.clients.prometheus.model.InstantQueryResult;

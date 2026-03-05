@@ -58,7 +58,7 @@ package org.opennms.integrations.ianus.prometheus;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
+import it.ianus.plugin.clients.PrometheusProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -936,7 +936,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import prometheus.it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
+import prometheus.it.ianus.plugin.clients.PrometheusProperties;
 import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
 import model.client.prometheus.it.ianus.plugin.InstantQueryResult;
 import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
@@ -1014,7 +1014,7 @@ Pattern mirrors `PerformanceCollector` (see `src/main/java/org/opennms/integrati
 ```java
 package org.opennms.integrations.ianus.prometheus.collector;
 
-import prometheus.it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
+import prometheus.it.ianus.plugin.clients.PrometheusProperties;
 import api.client.prometheus.it.ianus.plugin.QueryApi;
 import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
 import model.client.prometheus.it.ianus.plugin.InstantQueryResult;
