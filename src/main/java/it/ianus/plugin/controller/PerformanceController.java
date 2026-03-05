@@ -1,6 +1,6 @@
 package it.ianus.plugin.controller;
 
-import it.ianus.plugin.collector.PerformanceCollector;
+import it.ianus.plugin.collectors.OpenNMSCollector;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,9 +12,9 @@ import java.util.List;
 @RequestMapping("/ianus")
 public class PerformanceController {
 
-    private final PerformanceCollector collector;
+    private final OpenNMSCollector collector;
 
-    public PerformanceController(PerformanceCollector collector) {
+    public PerformanceController(OpenNMSCollector collector) {
         this.collector = collector;
     }
 

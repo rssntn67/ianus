@@ -58,7 +58,7 @@ package org.opennms.integrations.ianus.prometheus;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import it.ianus.plugin.prometheus.PrometheusProperties;
+import it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -149,8 +149,8 @@ public class PrometheusClientException extends RuntimeException {
 ```java
 package org.opennms.integrations.ianus.prometheus.client.handler;
 
-import it.ianus.plugin.prometheus.client.handler.PrometheusClientException;
-import it.ianus.plugin.prometheus.client.handler.PrometheusRestClient;
+import handler.it.ianus.plugin.prometheus.PrometheusClientException;
+import handler.it.ianus.plugin.prometheus.PrometheusRestClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -218,7 +218,7 @@ Expected: FAIL (class not found)
 ```java
 package org.opennms.integrations.ianus.prometheus.client.handler;
 
-import it.ianus.plugin.prometheus.client.handler.PrometheusClientException;
+import handler.it.ianus.plugin.prometheus.PrometheusClientException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -311,11 +311,11 @@ Test that Prometheus JSON responses map correctly to our model classes. Key JSON
 ```java
 package org.opennms.integrations.ianus.prometheus.client.model;
 
-import it.ianus.plugin.prometheus.client.model.Alert;
-import it.ianus.plugin.prometheus.client.model.InstantQueryResult;
-import it.ianus.plugin.prometheus.client.model.PrometheusResponse;
-import it.ianus.plugin.prometheus.client.model.RangeQueryResult;
-import it.ianus.plugin.prometheus.client.model.TargetResult;
+import model.it.ianus.plugin.prometheus.Alert;
+import model.it.ianus.plugin.prometheus.InstantQueryResult;
+import model.it.ianus.plugin.prometheus.PrometheusResponse;
+import model.it.ianus.plugin.prometheus.RangeQueryResult;
+import model.it.ianus.plugin.prometheus.TargetResult;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.ObjectMapper;
 
@@ -487,7 +487,7 @@ git commit -m "feat(prometheus): add Jackson model classes for Prometheus API re
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import it.ianus.plugin.prometheus.client.api.QueryApi;
+import api.it.ianus.plugin.prometheus.QueryApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -608,7 +608,7 @@ git commit -m "feat(prometheus): add QueryApi for instant and range queries"
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import it.ianus.plugin.prometheus.client.api.MetadataApi;
+import api.it.ianus.plugin.prometheus.MetadataApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -756,7 +756,7 @@ TargetsApiTest:
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import it.ianus.plugin.prometheus.client.api.TargetsApi;
+import api.it.ianus.plugin.prometheus.TargetsApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -799,7 +799,7 @@ AlertsApiTest:
 ```java
 package org.opennms.integrations.ianus.prometheus.client.api;
 
-import it.ianus.plugin.prometheus.client.api.AlertsApi;
+import api.it.ianus.plugin.prometheus.AlertsApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -930,13 +930,13 @@ git commit -m "feat(prometheus): add TargetsApi and AlertsApi"
 ```java
 package org.opennms.integrations.ianus.prometheus.collector;
 
-import it.ianus.plugin.prometheus.collector.PrometheusCollector;
+import it.ianus.plugin.collectors.PrometheusCollector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import prometheus.it.ianus.plugin.PrometheusProperties;
+import prometheus.it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
 import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
 import model.client.prometheus.it.ianus.plugin.InstantQueryResult;
 import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
@@ -1014,7 +1014,7 @@ Pattern mirrors `PerformanceCollector` (see `src/main/java/org/opennms/integrati
 ```java
 package org.opennms.integrations.ianus.prometheus.collector;
 
-import prometheus.it.ianus.plugin.PrometheusProperties;
+import prometheus.it.ianus.plugin.clients.prometheus.config.PrometheusProperties;
 import api.client.prometheus.it.ianus.plugin.QueryApi;
 import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
 import model.client.prometheus.it.ianus.plugin.InstantQueryResult;
@@ -1137,7 +1137,7 @@ git commit -m "feat(prometheus): add PrometheusCollector with scheduled metric p
 ```java
 package org.opennms.integrations.ianus.prometheus.controller;
 
-import it.ianus.plugin.prometheus.controller.PrometheusMetricDto;
+import it.ianus.plugin.controller.PrometheusMetricDto;
 
 import java.util.List;
 
@@ -1155,8 +1155,8 @@ public record PrometheusMetricCollectionDto(
 ```java
 package org.opennms.integrations.ianus.prometheus.controller;
 
-import it.ianus.plugin.prometheus.controller.PrometheusController;
-import it.ianus.plugin.prometheus.controller.PrometheusMetricDto;
+import it.ianus.plugin.controller.PrometheusController;
+import it.ianus.plugin.controller.PrometheusMetricDto;
 import org.junit.jupiter.api.Test;
 import collector.prometheus.it.ianus.plugin.PrometheusCollector;
 import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
@@ -1239,9 +1239,9 @@ Expected: FAIL
 package org.opennms.integrations.ianus.prometheus.controller;
 
 import api.client.prometheus.it.ianus.plugin.AlertsApi;
-import it.ianus.plugin.prometheus.controller.PrometheusMetricCollectionDto;
-import it.ianus.plugin.prometheus.controller.PrometheusMetricDto;
-import it.ianus.plugin.prometheus.client.api.MetadataApi;
+import it.ianus.plugin.controller.PrometheusMetricCollectionDto;
+import it.ianus.plugin.controller.PrometheusMetricDto;
+import api.it.ianus.plugin.prometheus.MetadataApi;
 import api.client.prometheus.it.ianus.plugin.TargetsApi;
 import handler.client.prometheus.it.ianus.plugin.PrometheusRestClient;
 import model.client.prometheus.it.ianus.plugin.PrometheusResponse;
