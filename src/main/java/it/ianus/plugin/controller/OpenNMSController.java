@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ianus")
-public class PerformanceController {
+@RequestMapping("/ianus/opennms")
+public class OpenNMSController {
 
     private final OpenNMSCollector collector;
 
-    public PerformanceController(OpenNMSCollector collector) {
+    public OpenNMSController(OpenNMSCollector collector) {
         this.collector = collector;
     }
 
-    @GetMapping("/performance/all")
-    public IanusPerformanceCollectionDto getAllPerformance(
+    @GetMapping("/metrics/all")
+    public IanusPerformanceCollectionDto getAllMetrics(
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 
@@ -31,8 +31,8 @@ public class PerformanceController {
         return new IanusPerformanceCollectionDto(page.size(), offset, totalCount, page);
     }
 
-    @GetMapping("/performance")
-    public IanusPerformanceCollectionDto getPerformance(
+    @GetMapping("/metrics")
+    public IanusPerformanceCollectionDto getMetrics(
             @RequestParam String resourceId,
             @RequestParam String attribute,
             @RequestParam(defaultValue = "0") int offset,
