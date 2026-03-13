@@ -20,8 +20,10 @@ public class OpenNMSController {
 
     @GetMapping("/metrics/all")
     public IanusMetricsCollectionDto getAllMetrics(
+            @RequestParam(defaultValue = "300000") long interval,
             @RequestParam(defaultValue = "0") int offset,
-            @RequestParam(defaultValue = "10") int count) {
+            @RequestParam(defaultValue = "10") int count
+    ) {
 
         List<IanusMetricsDto> all = collector.getAll();
         int totalCount = all.size();
@@ -35,6 +37,7 @@ public class OpenNMSController {
     public IanusMetricsCollectionDto getMetrics(
             @RequestParam String resourceId,
             @RequestParam String attribute,
+            @RequestParam int interval,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 

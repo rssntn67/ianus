@@ -28,6 +28,7 @@ public class PrometheusController {
 
     @GetMapping("/metrics/all")
     public IanusMetricsCollectionDto getAllMetrics(
+            @RequestParam(defaultValue = "300000") long interval,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {
 
@@ -41,6 +42,7 @@ public class PrometheusController {
 
     @GetMapping("/metrics")
     public IanusMetricsCollectionDto getMetrics(
+            @RequestParam(defaultValue = "300000") long interval,
             @RequestParam String metric,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int count) {

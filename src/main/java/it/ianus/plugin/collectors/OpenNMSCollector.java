@@ -106,7 +106,7 @@ public class OpenNMSCollector {
                 long dt = timestamps.get(i) - timestamps.get(i - 1);
                 if (dt == 0) continue;
                 double rate = (v2 - v1) / (dt / 1000.0);
-                dtos.add(new IanusMetricsDto(timestamps.get(i), metric, resourceId, rate));
+                dtos.add(new IanusMetricsDto(timestamps.get(i), metric, resourceId, dt, rate));
             }
             cache.put(resourceId + "::" + metric, dtos);
         }

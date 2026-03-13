@@ -69,7 +69,7 @@ public class PrometheusCollector {
                     ? sample.getMetric().getOrDefault("instance", "")
                     : "";
 
-            dtos.add(new IanusMetricsDto(timestamp, metricName, instance, value));
+            dtos.add(new IanusMetricsDto(timestamp, metricName, instance, 0L, value));
         }
         cache.put(query, dtos);
     }

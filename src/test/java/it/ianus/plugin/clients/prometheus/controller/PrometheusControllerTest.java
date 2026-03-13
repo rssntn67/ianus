@@ -36,10 +36,10 @@ class PrometheusControllerTest {
     @Test
     void getAllMetrics_returnsPaginatedResults() {
         IanusMetricsDto dto = new IanusMetricsDto(
-                1609459200L, "up", "prometheus", 1.0);
+                1609459200L, "up", "prometheus", 0L, 1.0);
         when(collector.getAll()).thenReturn(List.of(dto));
 
-        IanusMetricsCollectionDto result = controller.getAllMetrics(0, 10);
+        IanusMetricsCollectionDto result = controller.getAllMetrics(300000L, 0, 10);
 
         assertThat(result.totalCount()).isEqualTo(1);
         assertThat(result.count()).isEqualTo(1);
@@ -51,12 +51,12 @@ class PrometheusControllerTest {
     @Test
     void getAllMetrics_paginatesCorrectly() {
         List<IanusMetricsDto> dtos = List.of(
-                new IanusMetricsDto(1L, "a", "", 1.0),
-                new IanusMetricsDto(2L, "b", "", 2.0),
-                new IanusMetricsDto(3L, "c", "", 3.0));
+                new IanusMetricsDto(1L, "a", "", 0L, 1.0),
+                new IanusMetricsDto(2L, "b", "", 0L, 2.0),
+                new IanusMetricsDto(3L, "c", "", 0L, 3.0));
         when(collector.getAll()).thenReturn(dtos);
 
-        IanusMetricsCollectionDto result = controller.getAllMetrics(1, 1);
+        IanusMetricsCollectionDto result = controller.getAllMetrics(300000L, 1, 1);
 
         assertThat(result.totalCount()).isEqualTo(3);
         assertThat(result.count()).isEqualTo(1);
@@ -67,9 +67,9 @@ class PrometheusControllerTest {
     @Test
     void getAllMetrics_offsetBeyondSize_returnsEmptyPage() {
         when(collector.getAll()).thenReturn(List.of(
-                new IanusMetricsDto(1L, "a", "", 1.0)));
+                new IanusMetricsDto(1L, "a", "", 0L, 1.0)));
 
-        IanusMetricsCollectionDto result = controller.getAllMetrics(10, 5);
+        IanusMetricsCollectionDto result = controller.getAllMetrics(300000L, 10, 5);
 
         assertThat(result.totalCount()).isEqualTo(1);
         assertThat(result.count()).isEqualTo(0);
@@ -81,10 +81,10 @@ class PrometheusControllerTest {
     @Test
     void getMetrics_returnsFilteredResults() {
         IanusMetricsDto dto = new IanusMetricsDto(
-                1609459200L, "up", "prometheus", 1.0);
+                1609459200L, "up", "prometheus", 0L, 1.0);
         when(collector.get("up")).thenReturn(List.of(dto));
 
-        IanusMetricsCollectionDto result = controller.getMetrics("up", 0, 10);
+        IanusMetricsCollectionDto result = controller.getMetrics(300000L, "up", 0, 10);
 
         assertThat(result.totalCount()).isEqualTo(1);
         assertThat(result.performances().get(0).metric()).isEqualTo("up");
@@ -95,7 +95,7 @@ class PrometheusControllerTest {
     void getMetrics_unknownMetric_returnsEmptyCollection() {
         when(collector.get("nonexistent")).thenReturn(List.of());
 
-        IanusMetricsCollectionDto result = controller.getMetrics("nonexistent", 0, 10);
+        IanusMetricsCollectionDto result = controller.getMetrics(300000L, "nonexistent", 0, 10);
 
         assertThat(result.totalCount()).isEqualTo(0);
         assertThat(result.performances()).isEmpty();

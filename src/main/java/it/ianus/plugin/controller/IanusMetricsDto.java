@@ -4,5 +4,6 @@ public record IanusMetricsDto(
         long timestamp,
         String metric,
         String instance,
+        long interval,
         Object value
 ) {}
